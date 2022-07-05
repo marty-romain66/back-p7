@@ -4,6 +4,7 @@ const router = express.Router();
 const userController = require('../controllers/user.controller');
 const auth = require('../middlewares/auth.middleware');
 const multer = require('../middlewares/multer-config');
+const admin = require('../middlewares/admin.middleware');
 
 // Routes pour les utilisateurs
 router.post('/signup',multer, userController.signup);
@@ -14,7 +15,7 @@ router.delete('/user/:id',  userController.deleteUser);
 
 // Routes pour les admins
 router.get('/admin/users/:id',  userController.getAllUsersByAdmin);
-router.put('/admin/users/:id', auth, userController.modifyUserRole);
+router.put('/admin/users/:id',  auth, admin,  userController.modifyUserRole);
 router.delete('/admin/users/:id',  userController.deleteUserByAdmin);
 
 module.exports = router;
