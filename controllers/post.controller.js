@@ -205,3 +205,20 @@ exports.deletePostByAdmin = (req, res) => {
     })
     .catch((error) => res.status(500).json({ error }));
 };
+ // Afficher post apres ca creation
+exports.getPostsAfterPost = (req, res) => {
+  const id = req.params.id;
+
+  Post.findOne({
+    where: {
+      title: title,
+    },
+    include: {
+      model: User,
+    },
+  })
+    .then((post) => res.status(200).json(post),)
+    .catch((error) =>
+      res.status(400).json({ message: "Impossible d'afficher ce post", error })
+    );
+}

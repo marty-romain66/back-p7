@@ -1,27 +1,26 @@
-// middleware for admin
-const Post = require('../models').Post;
-const User = require('../models').User;
-export const adminMiddleware = (req, res, next) => {
-    const userId = req.params.id;
+// jwt
+const jwt = require("jsonwebtoken");
+const dotenv = require("dotenv");
+dotenv.config();
 
-    User.findOne({
-            where: {
-                id: userId
-            }
-        })
-        .then(user => {
-            if (user.isAdmin) {
-              res.status(200).json({
-                message: 'Admin'
-                });
-                next();
-            } else {
-                res.status(401).json({
-                    message: 'Vous n\'avez pas les droits pour effectuer cette action'
-                });
-            }
-        })
-        .catch(error => res.status(500).json({
+
+module.exports = (req, res, next) => {
+    try {
+        /*** récupération du token dans le header de la requête d'autorisation et la récupération aprés l'espace du deuxieme élément du tableau qui est le token ***/
+        const token = req.headers.authorization.split(' ')[1];
+        /*** vérification et décodage du token avec la clé de sécurité ***/
+        const decodedToken = jwt.verify(token, 'RANDOM_TOKEN_SECRET');
+        /*** décodage du isAdmin ***/
+        const isAdmin = decodedToken.isAdmin;
+        if (isAdmin !== true) {
+            throw 'interdit aux non admins';
+
+        } else {
+            next();
+        }
+    } catch {
+        res.status(401).json({
             error
-        }));
-}
+        });
+    }
+};

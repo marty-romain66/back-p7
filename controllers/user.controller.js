@@ -29,16 +29,33 @@ exports.signup = (req, res) => {
         };
         User.create(user)
           .then(() =>
+          User.findOne({
+            where: {
+              email: req.body.email,
+            },
+          }).then((user) => {
             res.status(201).json({
+              userId: user.id,
               message: "Utilisateur créé avec succès !",
-            })
+              name: user.name,
+              email: user.email,
+              profilePicture: user.profilePicture,
+              token: jwt.sign(
+                {
+                  userId: user.id,
+                  name: user.name,
+                  email: user.email,
+                  isAdmin: false,
+                },
+                "RANDOM_TOKEN_SECRET",
+                {
+                  expiresIn: "1h",
+                }
+              ),
+            });
+          }
           )
-          .catch((error) =>
-            res.status(400).json({
-              message: "Impossible de créer cet utilisateur",
-              error,
-            })
-          );
+          )
       })
       .catch((error) =>
         res.status(500).json({
@@ -76,6 +93,7 @@ exports.login = (req, res) => {
             token: jwt.sign(
               {
                 userId: user.id,
+                isAdmin: user.isAdmin,
               },
               "RANDOM_TOKEN_SECRET",
               {
@@ -238,8 +256,12 @@ exports.modifyUserRole = (req, res) => {
       res.status(400).json({
         message: "Impossible de modifier le rôle de cet utilisateur",
         error,
+    
       })
-    );
+    )
+    .catch((error) => res.status(500).json({ error }));
+
+
 };
 
 exports.deleteUserByAdmin = (req, res) => {
