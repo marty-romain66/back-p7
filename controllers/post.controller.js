@@ -2,6 +2,7 @@ const dotenv = require("dotenv");
 const Post = require("../models").Post;
 const User = require("../models").User;
 const Comment = require("../models").Comment;
+const Like = require("../models").Like;
 const fs = require("fs");
 const { QueryTypes } = require("sequelize");
 
@@ -24,6 +25,9 @@ exports.getAllPosts = (req, res) => {
           model: User,
         },
       },
+     {
+        model: Like,
+     }
     ],
   })
     .then((posts) => res.status(200).json(posts))

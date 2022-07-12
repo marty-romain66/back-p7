@@ -3,6 +3,7 @@ const router = express.Router();
 
 const postController = require('../controllers/post.controller');
 const commentController = require('../controllers/comment.controller');
+const likeController = require('../controllers/like.controller');
 
 const auth = require('../middlewares/auth.middleware');
 const multer = require('../middlewares/multer-config');
@@ -24,5 +25,11 @@ router.get('/:postId/comments/:id', auth, commentController.getOneComment);
 router.put('/:postId/comments/:id', auth, admin, commentController.modifyComment);
 router.delete('/:postId/comments/:id',  commentController.deleteComment);
 router.delete('/admin/:postId/comments/:id',  commentController.deleteCommentByAdmin);
+
+
+// Routes pour les likes
+router.post('/:postId/likes',  likeController.createLike);
+
+router.delete('/:postId/likes/:id',  likeController.deleteLike);
 
 module.exports = router;

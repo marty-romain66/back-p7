@@ -18,6 +18,10 @@ module.exports = (sequelize, DataTypes) => {
         onDelete: 'CASCADE',
         hooks: true
       });
+      models.Post.hasMany(models.Like, {
+        onDelete: 'CASCADE',
+        hooks: true
+      });
     }
   };
   Post.init({
