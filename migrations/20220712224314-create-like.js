@@ -15,7 +15,7 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       like: {
-        type: Sequelize.NUMBER
+        type: Sequelize.BOOLEAN
       },
       userName: {
         type: Sequelize.STRING
