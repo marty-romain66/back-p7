@@ -9,6 +9,7 @@ exports.createLike = (req, res) => {
     const likes = {
         postId: req.params.postId,
         userId: req.body.userId,
+        userName : req.body.userName,
     like: req.body.like
     };
 
