@@ -12,8 +12,8 @@ dotenv.config();
 
 // Afficher tous les posts (plus récents)
 exports.getAllPosts = (req, res) => {
-  console.log("oui");
   Post.findAll({
+
     order: [["updatedAt", "DESC"]],
     include: [
       {
@@ -25,9 +25,9 @@ exports.getAllPosts = (req, res) => {
           model: User,
         },
       },
-     {
+      {
         model: Like,
-     }
+      }
     ],
   })
     .then((posts) => res.status(200).json(posts))
@@ -37,6 +37,7 @@ exports.getAllPosts = (req, res) => {
         .json({ message: "Impossible d'afficher tous les posts", error })
     );
 };
+
 
 // Afficher un post
 exports.getOnePost = (req, res) => {
@@ -89,9 +90,8 @@ exports.modifyPost = (req, res) => {
   };
 
   if (req.file) {
-    updatedPost["imageUrl"] = `${req.protocol}://${req.get("host")}/images/${
-      req.file.filename
-    }`;
+    updatedPost["imageUrl"] = `${req.protocol}://${req.get("host")}/images/${req.file.filename
+      }`;
   }
 
   Post.update(updatedPost, {
@@ -209,7 +209,7 @@ exports.deletePostByAdmin = (req, res) => {
     })
     .catch((error) => res.status(500).json({ error }));
 };
- // Afficher post apres ca creation
+// Afficher post apres ca creation
 exports.getPostsAfterPost = (req, res) => {
   const id = req.params.id;
 
