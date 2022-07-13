@@ -25,7 +25,9 @@ exports.getAllPosts = (req, res) => {
           model: User,
         },
       },
-      
+      {
+        model: Like,
+      }
     ],
   })
     .then((posts) => res.status(200).json(posts))
