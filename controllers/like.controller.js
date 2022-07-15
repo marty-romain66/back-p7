@@ -20,19 +20,19 @@ exports.createLike = (req, res) => {
         }
     }).then(like => {
         if (like) {
-            res.status(400).send({
+            res.status(401).send({
                 message: "Ce like existe déjà"
             });
         } else {
             Like.create(likes).then(like => {
                 res.status(201).send(like);
             }).catch(error => {
-                res.status(400).send(error);
+                res.status(401).send(error);
             });
         }
     }
     ).catch(error => {
-        res.status(400).send(error);
+        res.status(401).send(error);
     }
     );
 }
