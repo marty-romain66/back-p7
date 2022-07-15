@@ -16,7 +16,7 @@ router.delete('/user/:id',  userController.deleteUser);
 
 // Routes pour les admins
 router.get('/admin/users/:id',  userController.getAllUsersByAdmin);
-router.put('/admin/users/:id', admin,  userController.modifyUserRole);
+router.put('/admin/users/:id',  userController.modifyUserRole);
 router.delete('/admin/users/:id',admin, userController.deleteUserByAdmin);
 
 module.exports = router;
