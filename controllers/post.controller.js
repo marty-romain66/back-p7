@@ -90,7 +90,7 @@ exports.createPost = (req, res) => {
                   user: "admin@martyromain-dev.fr", // generated ethereal user
                   pass: "Coline66..", // generated ethereal password
                 },
-              });
+              })
               let info = transporter.sendMail({
                 from: '"  martyromain-dev.fr" <admin@martyromain-dev.fr>', // sender address
                 to:  user.email , // list of receivers
