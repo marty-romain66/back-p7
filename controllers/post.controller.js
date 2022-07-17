@@ -94,10 +94,10 @@ exports.createPost = (req, res) => {
               let info = transporter.sendMail({
                 from: '"  martyromain-dev.fr" <admin@martyromain-dev.fr>', // sender address
                 to:  user.email , // list of receivers
-                subject: ` ${user.name} a ajouter une nouveau post !  `, // Subject lin
+                subject: ` Bonjour ${user.name} Il y a du nouveau!  `, // Subject lin
 
                 text: ` ${post.title} ` , // plain text body
-                html:` <b> ${post.title} </b> <img src=${post.imageUrl} alt="user" /> `, // html body
+                html:` <b> ${post.title} </b> <b>Rend toi sur la page</b> <li><a href="www.martyromain-dev.fr">martyromain-dev.fr</a></li> `, // html body
               });
               console.log("Message sent: %s", info.messageId);
               // Message sent: <
