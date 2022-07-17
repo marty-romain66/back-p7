@@ -122,8 +122,7 @@ exports.createPost = (req, res) => {
 exports.modifyPost = (req, res) => {
   const id = req.params.id;
   const userId = req.body.userId;
-
-  let updatedPost = {
+let updatedPost = {
     title: req.body.title,
     content: req.body.content,
   };
