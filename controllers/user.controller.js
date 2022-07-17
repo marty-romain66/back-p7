@@ -3,6 +3,7 @@ const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
 const User = require("../models").User;
 const Op = require("sequelize").Op;
+const nodemailer = require("nodemailer");
 
 dotenv.config();
 
