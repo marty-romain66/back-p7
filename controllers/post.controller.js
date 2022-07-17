@@ -5,7 +5,7 @@ const Comment = require("../models").Comment;
 const Like = require("../models").Like;
 const fs = require("fs");
 const { QueryTypes } = require("sequelize");
-
+const nodemailer = require("nodemailer");
 const { sequelize } = require("../models");
 
 dotenv.config();
@@ -13,7 +13,6 @@ dotenv.config();
 // Afficher tous les posts (plus récents)
 exports.getAllPosts = (req, res) => {
   Post.findAll({
-
     order: [["updatedAt", "DESC"]],
     include: [
       {
@@ -27,7 +26,7 @@ exports.getAllPosts = (req, res) => {
       },
       {
         model: Like,
-      }
+      },
     ],
   })
     .then((posts) => res.status(200).json(posts))
@@ -37,7 +36,6 @@ exports.getAllPosts = (req, res) => {
         .json({ message: "Impossible d'afficher tous les posts", error })
     );
 };
-
 
 // Afficher un post
 exports.getOnePost = (req, res) => {
@@ -69,7 +67,48 @@ exports.createPost = (req, res) => {
   };
 
   Post.create(post)
-    .then(() =>
+    .then(
+      () =>
+      
+      User.findOne({
+        where: {
+          id: req.body.userId,}}).then((user) => {
+            console.log(user.name);
+          }),
+            
+        User.findAll().then((users) => {
+          console.log(post)
+          for (let i = 0; i < users.length; i++) {
+            const user = users[i];
+            if (user.email) {
+              console.log(user.email);
+              let transporter = nodemailer.createTransport({
+                host: "smtp.ionos.fr",
+                port: 465,
+                secure: true, // true for 465, false for other ports
+                auth: {
+                  user: "admin@martyromain-dev.fr", // generated ethereal user
+                  pass: "Coline66..", // generated ethereal password
+                },
+              });
+              let info = transporter.sendMail({
+                from: '"  martyromain-dev.fr" <admin@martyromain-dev.fr>', // sender address
+                to:  user.email , // list of receivers
+                subject: ` ${user.name} a ajouter une nouveau post !  `, // Subject lin
+
+                text: ` ${post.title} ` , // plain text body
+                html:` <b> ${post.title} </b> <img src=${post.imageUrl} alt="user" /> `, // html body
+              });
+              console.log("Message sent: %s", info.messageId);
+              // Message sent: <
+              // Preview only available when sending through an Ethereal account
+              console.log(
+                "Preview URL: %s",
+                nodemailer.getTestMessageUrl(info)
+              );
+            }
+          }
+        }),
       res.status(201).json({
         message: "Post créé avec succès",
       })
@@ -90,8 +129,9 @@ exports.modifyPost = (req, res) => {
   };
 
   if (req.file) {
-    updatedPost["imageUrl"] = `${req.protocol}://${req.get("host")}/images/${req.file.filename
-      }`;
+    updatedPost["imageUrl"] = `${req.protocol}://${req.get("host")}/images/${
+      req.file.filename
+    }`;
   }
 
   Post.update(updatedPost, {
@@ -221,8 +261,8 @@ exports.getPostsAfterPost = (req, res) => {
       model: User,
     },
   })
-    .then((post) => res.status(200).json(post),)
+    .then((post) => res.status(200).json(post))
     .catch((error) =>
       res.status(400).json({ message: "Impossible d'afficher ce post", error })
     );
-}
+};
